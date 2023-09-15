@@ -4,7 +4,7 @@ import { prisma } from "../lib/prisma";
 import { randomUUID } from "node:crypto";
 import path from "node:path";
 import fs from 'node:fs';
-import{pipeline} from 'node:stream';
+import { pipeline } from 'node:stream';
 import { promisify } from "node:util";
 
 const pump = promisify(pipeline)
@@ -31,10 +31,10 @@ export async function uploadVideoRoute(app: FastifyInstance) {
             return reply.status(400).send({ error: "Invalid input type, please upload a MP3." })
         }
 
-        const fileBaseName = path.basename(data.filename, extension)
-        const fileUploadName = `${fileBaseName}-${randomUUID()}${extension}`
-        const uploadDestination = path.resolve(__dirname, '../../tmp', fileUploadName)
+        const fileBaseName = path.basename(data.filename, extension) //retorna o nome do arquivo sem a extensão
+        const fileUploadName = `${fileBaseName}-${randomUUID()}${extension}` //cria um novo nome pro arquivo
+        const uploadDestination = path.resolve(__dirname, '../../tmp', fileUploadName) //cria o caminho para salvar em um diretorio
 
-        await pump(data.file, fs.createWriteStream(data.filename))
+        await pump(data.file, fs.createWriteStream(data.filename)) //salva vo disco
     })
 }
